@@ -6,12 +6,12 @@ services:
     depends_on:
       - blog-db
     env_file:
-      - .env
-    expose:
-      - "3000"   # expose to other containers, no need for 3002 mapping anymore
+      - .env   # <-- This ensures Docker loads environment variables from .env
+    ports:
+      - "3002:3000"   # maps host:container
     networks:
       - blog-net
-      - caddy
+      - caddy   # <-- Added so global Caddy can reverse proxy this
 
   blog-db:
     image: postgres:15
@@ -25,10 +25,11 @@ services:
       - blog-data:/var/lib/postgresql/data
     networks:
       - blog-net
+      - caddy   # <-- Optional, only needed if Caddy ever needs direct DB access (usually not required)
 
 networks:
   blog-net:
-  caddy:
+  caddy:   # <-- Declare the external Caddy network
     external: true
 
 volumes:

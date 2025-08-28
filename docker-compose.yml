@@ -1,4 +1,4 @@
-
+version: "3.9"
 
 services:
   app:
@@ -10,12 +10,11 @@ services:
     env_file:
       - .env
     depends_on:
-      - blog-db
-    networks:
-      - caddy_net
-      - blog_net
+      - db
+    environment:
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASSWORD}@db:5432/${PG_DATABASE}
 
-  blog-db:
+  db:
     image: postgres:15
     container_name: blog-db
     restart: always
@@ -25,13 +24,6 @@ services:
       POSTGRES_DB: ${PG_DATABASE}
     volumes:
       - db_data:/var/lib/postgresql/data
-    networks:
-      - blog_net
 
 volumes:
   db_data:
-
-networks:
-  blog_net:
-  caddy_net:
-    external: true

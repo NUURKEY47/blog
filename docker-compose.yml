@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   blog-app:
     build: .
@@ -7,8 +5,8 @@ services:
     restart: always
     depends_on:
       - blog-db
-    environment:
-      - DATABASE_URL=postgresql://${PG_USER}:${PG_PASSWORD}@blog-db:5432/${PG_DATABASE}
+    env_file:
+      - .env   # <-- This ensures Docker loads environment variables from .env
     ports:
       - "3002:3000"   # maps host:container
     networks:

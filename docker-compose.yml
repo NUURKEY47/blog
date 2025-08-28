@@ -6,11 +6,12 @@ services:
     depends_on:
       - blog-db
     env_file:
-      - .env   # <-- This ensures Docker loads environment variables from .env
-    ports:
-      - "3002:3000"   # maps host:container
+      - .env
+    expose:
+      - "3000"   # expose to other containers, no need for 3002 mapping anymore
     networks:
       - blog-net
+      - caddy
 
   blog-db:
     image: postgres:15
@@ -27,6 +28,8 @@ services:
 
 networks:
   blog-net:
+  caddy:
+    external: true
 
 volumes:
   blog-data:

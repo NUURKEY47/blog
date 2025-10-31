@@ -97,7 +97,7 @@ app.post("/api/posts", async (req, res) => {
       "INSERT INTO blogs (title, content, author) VALUES ($1, $2, $3)",
       [title, content, author]
     );
-    res.status(201).json({ message: "Post created successfully" });
+res.redirect("/");
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

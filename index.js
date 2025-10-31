@@ -92,18 +92,17 @@ app.get("/new", (req, res) => {
 //post new post
 app.post("/api/posts", async (req, res) => {
   try {
-    const title = req.body.title;
-    const content = req.body.content;
-    const author = req.body.author;
+    const { title, content, author } = req.body;
     await db.query(
-      "INSERT INTO blogs (title,content,author)  VALUES($1, $2,$3)",
+      "INSERT INTO blogs (title, content, author) VALUES ($1, $2, $3)",
       [title, content, author]
     );
-    res.redirect("/");
+    res.status(201).json({ message: "Post created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 // GET a specific post by id
 app.get("/api/posts/delete/:id", async (req, res) => {
